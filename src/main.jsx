@@ -4,10 +4,10 @@ import App from './App.jsx'
 import { Layout } from './Layout.jsx'
 import { store } from './redux/Store'
 import './index.css'
-import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom'
+import { createHashRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom'
 import { Blog, fetchBlog } from './components/Blog.jsx'
 
-const router = createBrowserRouter(
+const router = createHashRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
       <Route path="" element={<App />} />
