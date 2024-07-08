@@ -74,6 +74,10 @@ export const Blog = () => {
     setShareCardMetaData();
   }, [data]);
 
+  useEffect(() => {
+    document.title = `Blog - ${data?.title}`;
+  }, [data]);
+
   function handleLike(e) {
     e.preventDefault();
     if (data?.likes?.includes(user?.username)) {
