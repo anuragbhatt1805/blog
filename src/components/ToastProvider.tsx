@@ -1,9 +1,9 @@
 'use client'
 
 import { createContext, useContext, useState, useCallback } from 'react'
-import { X, Info, AlertTriangle, AlertCircle } from 'lucide-react'
+import { X, Info, AlertTriangle, AlertCircle, Check } from 'lucide-react'
 
-type ToastType = 'info' | 'warn' | 'error'
+type ToastType = 'info' | 'warn' | 'error' | 'success'
 
 interface Toast {
   id: string
@@ -16,6 +16,7 @@ interface ToastContextType {
   info: (message: string) => void
   warn: (message: string) => void
   error: (message: string) => void
+  success: (message: string) => void
 }
 
 const ToastContext = createContext<ToastContextType | null>(null)
@@ -32,6 +33,7 @@ const icons: Record<ToastType, React.ReactNode> = {
   info:  <Info size={18} />,
   warn:  <AlertTriangle size={18} />,
   error: <AlertCircle size={18} />,
+  success: <Check size={18} />,
 }
 
 const colors: Record<ToastType, { bg: string; border: string; icon: string }> = {
@@ -39,6 +41,11 @@ const colors: Record<ToastType, { bg: string; border: string; icon: string }> = 
     bg: 'rgba(20, 184, 166, 0.08)',
     border: 'rgba(20, 184, 166, 0.25)',
     icon: 'var(--primary)',
+  },
+  success: {
+    bg: 'rgba(34, 197, 94, 0.08)',
+    border: 'rgba(34, 197, 94, 0.25)',
+    icon: '#22c55e',
   },
   warn: {
     bg: 'rgba(245, 158, 11, 0.08)',
@@ -73,6 +80,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     info:  (msg) => addToast(msg, 'info'),
     warn:  (msg) => addToast(msg, 'warn'),
     error: (msg) => addToast(msg, 'error'),
+    success: (msg) => addToast(msg, 'success'),
   }
 
   return (

@@ -9,10 +9,12 @@ export default async function Home() {
     .from('blogs')
     .select(`
       id, 
+      slug,
       title, 
       subtitle, 
       read_time_minutes, 
       created_at,
+      thumbnail_url,
       profiles:author_id (name, avatar_url)
     `)
     .order('created_at', { ascending: false })
@@ -52,7 +54,7 @@ export default async function Home() {
           </h1>
 
           <p className="paragraph-lg animate-fade-up animate-fade-up-delay-2" style={{ maxWidth: '640px', margin: '0 auto 2.5rem auto' }}>
-            Discover articles, tutorials, and deep dives on software engineering, 
+            Discover articles, tutorials, and deep dives on software engineering,
             system design, and the future of web development.
           </p>
 
@@ -89,10 +91,10 @@ export default async function Home() {
       <section className="section-padding">
         <div className="app-container" style={{ maxWidth: '900px' }}>
           <div className="saas-card-flat" style={{ display: 'flex', gap: '2.5rem', alignItems: 'center', flexWrap: 'wrap', padding: '2.5rem' }}>
-            <div style={{ 
-              width: '7rem', height: '7rem', borderRadius: '50%', 
-              border: '2px solid var(--primary)', 
-              display: 'flex', alignItems: 'center', justifyContent: 'center', 
+            <div style={{
+              width: '7rem', height: '7rem', borderRadius: '50%',
+              border: '2px solid var(--primary)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
               background: 'var(--surface-2)', flexShrink: 0, margin: '0 auto',
               boxShadow: 'var(--shadow-glow)'
             }}>
@@ -125,44 +127,57 @@ export default async function Home() {
           {latestBlogs?.length ? (
             <div className="grid-featured">
               {latestBlogs.map((blog: any, i: number) => (
-                <Link key={blog.id} href={`/blogs/${blog.id}`} style={{ display: 'block' }}>
-                  <div className="saas-card" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                    <div className="flex-row-gap paragraph-sm" style={{ marginBottom: '1rem' }}>
-                      <span className="flex-center" style={{ gap: '0.25rem' }}>
-                        <Clock size={14} />
-                        {blog.read_time_minutes} min read
-                      </span>
-                      <span style={{ color: 'var(--border)' }}>·</span>
-                      <span>
-                        {new Date(blog.created_at).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric'
-                        })}
-                      </span>
+                <Link key={blog.id} href={`/blogs/${blog.slug || blog.id}`} style={{ display: 'block', height: '100%' }}>
+                  <div className="saas-card hover-lift" style={{ display: 'flex', flexDirection: 'row', height: '100%', padding: '1.25rem' }}>
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                      <div className="flex-row-gap paragraph-sm" style={{ marginBottom: '1rem' }}>
+                        <span className="flex-center" style={{ gap: '0.25rem' }}>
+                          <Clock size={14} />
+                          {blog.read_time_minutes} min read
+                        </span>
+                        <span style={{ color: 'var(--border)' }}>·</span>
+                        <span>
+                          {new Date(blog.created_at).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                          })}
+                        </span>
+                      </div>
+
+                      <h3 className={i === 0 ? 'heading-lg' : 'heading-md'} style={{ marginBottom: '0.75rem', lineHeight: 1.3 }}>
+                        {blog.title}
+                      </h3>
+
+                      <p className="paragraph-md" style={{
+                        flexGrow: 1,
+                        display: '-webkit-box',
+                        WebkitLineClamp: i === 0 ? 3 : 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        marginBottom: '1.5rem'
+                      }}>
+                        {blog.subtitle}
+                      </p>
+
+                      <div className="flex-row-gap" style={{ marginTop: 'auto' }}>
+                        <div className="avatar-circle" style={{ width: '1.75rem', height: '1.75rem' }}>
+                          {blog.profiles?.avatar_url ? (
+                            <img src={blog.profiles.avatar_url} alt="" />
+                          ) : (
+                            <Users size={14} />
+                          )}
+                        </div>
+                        <span style={{ fontWeight: 500, fontSize: '0.875rem' }}>
+                          {blog.profiles?.name || 'Anonymous'}
+                        </span>
+                      </div>
                     </div>
-
-                    <h3 className={i === 0 ? 'heading-lg' : 'heading-md'} style={{ marginBottom: '0.75rem', lineHeight: 1.3 }}>
-                      {blog.title}
-                    </h3>
-
-                    <p className="paragraph-md" style={{ 
-                      flexGrow: 1,
-                      display: '-webkit-box', 
-                      WebkitLineClamp: i === 0 ? 3 : 2, 
-                      WebkitBoxOrient: 'vertical', 
-                      overflow: 'hidden',
-                      marginBottom: '1.25rem'
-                    }}>
-                      {blog.subtitle}
-                    </p>
-
-                    <div className="flex-row-gap" style={{ marginTop: 'auto' }}>
-                      <span className="text-primary" style={{ fontSize: '0.875rem', fontWeight: 600 }}>
-                        Read article
-                      </span>
-                      <ArrowRight size={14} style={{ color: 'var(--primary)' }} />
-                    </div>
+                    {blog.thumbnail_url && (
+                      <div style={{ marginBottom: '1.25rem', borderRadius: 'var(--radius-md)', overflow: 'hidden', aspectRatio: '16/9', width: '30%' }}>
+                        <img src={blog.thumbnail_url} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      </div>
+                    )}
                   </div>
                 </Link>
               ))}

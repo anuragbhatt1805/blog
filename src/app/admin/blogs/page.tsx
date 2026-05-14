@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Plus, Edit2, Eye, EyeOff } from 'lucide-react'
 import { toggleBlogStatus, deleteBlog } from '../actions'
 import DeleteBlogButton from '../components/DeleteBlogButton'
+import StatusToggleButton from '../components/StatusToggleButton'
 
 export default async function AdminBlogsPage() {
   const supabase = await createClient()
@@ -36,7 +37,12 @@ export default async function AdminBlogsPage() {
             {blogs?.length ? blogs.map(blog => (
               <tr key={blog.id} style={{ borderBottom: '1px solid var(--surface-3)' }}>
                 <td style={{ padding: '1rem', fontWeight: 500 }}>
-                  <Link href={`/blogs/${blog.id}`} className="hover:text-primary transition-colors">
+                  <Link href={`/blogs/${blog.id}`} className="hover:text-primary transition-colors" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    {blog.thumbnail_url ? (
+                      <img src={blog.thumbnail_url} alt="" style={{ width: '40px', height: '24px', objectFit: 'cover', borderRadius: '4px' }} />
+                    ) : (
+                      <div style={{ width: '40px', height: '24px', backgroundColor: 'var(--surface-3)', borderRadius: '4px' }} />
+                    )}
                     {blog.title}
                   </Link>
                 </td>
@@ -55,17 +61,11 @@ export default async function AdminBlogsPage() {
                 </td>
                 <td style={{ padding: '1rem' }}>
                   <div className="flex-center" style={{ justifyContent: 'flex-end', gap: '0.5rem' }}>
-                    <form action={toggleBlogStatus.bind(null, blog.id, blog.status === 'published' ? 'draft' : 'published')}>
-                      <button type="submit" className="btn-icon text-muted hover:text-primary" title={blog.status === 'published' ? "Revert to Draft" : "Publish"}>
-                        {blog.status === 'published' ? <EyeOff size={18} /> : <Eye size={18} />}
-                      </button>
-                    </form>
+                    <StatusToggleButton id={blog.id} title={blog.title} status={blog.status} />
                     <Link href={`/admin/blogs/${blog.id}/edit`} className="btn-icon text-muted" style={{ color: 'var(--secondary)' }} title="Edit">
                       <Edit2 size={18} />
                     </Link>
-                    <form action={deleteBlog.bind(null, blog.id)}>
-                      <DeleteBlogButton />
-                    </form>
+                    <DeleteBlogButton id={blog.id} title={blog.title} />
                   </div>
                 </td>
               </tr>

@@ -12,8 +12,42 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "DevBlog - Advanced Developer Insights",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://blog-anurag.vercel.app'),
+  title: {
+    default: "DevBlog - Advanced Developer Insights",
+    template: "%s | DevBlog"
+  },
   description: "A premium blogging platform for developers to share insights, tutorials, and more.",
+  keywords: ["developer", "blog", "coding", "programming", "tutorials", "insights"],
+  authors: [{ name: "Anurag" }],
+  creator: "Anurag",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://blog-anurag.vercel.app", // Placeholder, will be used if defined
+    siteName: "DevBlog",
+    title: "DevBlog - Advanced Developer Insights",
+    description: "A premium blogging platform for developers to share insights, tutorials, and more.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "DevBlog",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "DevBlog - Advanced Developer Insights",
+    description: "A premium blogging platform for developers to share insights, tutorials, and more.",
+    images: ["/og-image.png"],
+    creator: "@devblog",
+  },
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-icon.png",
+  },
 };
 
 export default function RootLayout({

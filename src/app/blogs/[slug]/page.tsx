@@ -4,24 +4,78 @@ import BlogActions from './BlogActions'
 import BlogContent from './BlogContent'
 import { Clock, User, Calendar } from 'lucide-react'
 import Link from 'next/link'
+import type { Metadata } from 'next'
 
-export default async function BlogDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
-  const blogId = resolvedParams.id;
+  const blogSlug = resolvedParams.slug;
   const supabase = await createClient()
 
-  const { data: blog, error } = await supabase
+  const decodedSlug = decodeURIComponent(blogSlug);
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(decodedSlug);
+
+  let query = supabase.from('blogs').select('title, subtitle, thumbnail_url, tags');
+  if (isUuid) {
+    query = query.eq('id', decodedSlug);
+  } else {
+    query = query.eq('slug', decodedSlug);
+  }
+
+  const { data: blog } = await query.single()
+
+  if (!blog) {
+    return {
+      title: 'Blog Not Found',
+    }
+  }
+
+  return {
+    title: blog.title,
+    description: blog.subtitle,
+    keywords: blog.tags || [],
+    openGraph: {
+      title: blog.title,
+      description: blog.subtitle,
+      type: 'article',
+      images: blog.thumbnail_url ? [{ url: blog.thumbnail_url }] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: blog.title,
+      description: blog.subtitle,
+      images: blog.thumbnail_url ? [blog.thumbnail_url] : [],
+    },
+  }
+}
+
+export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await params;
+  const blogSlug = resolvedParams.slug;
+  const supabase = await createClient()
+
+  const decodedSlug = decodeURIComponent(blogSlug);
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(decodedSlug);
+
+  let query = supabase
     .from('blogs')
     .select(`
       *,
       profiles:author_id (name, avatar_url)
-    `)
-    .eq('id', blogId)
-    .single()
+    `);
+
+  if (isUuid) {
+    query = query.eq('id', decodedSlug);
+  } else {
+    query = query.eq('slug', decodedSlug);
+  }
+
+  const { data: blog, error } = await query.single()
 
   if (error || !blog) {
     notFound()
   }
+
+  const blogId = blog.id;
 
   const { data: comments } = await supabase
     .from('blog_comments')
@@ -93,6 +147,13 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
           </span>
         </div>
       </header>
+
+      {/* Thumbnail */}
+      {blog.thumbnail_url && (
+        <div style={{ marginBottom: '2.5rem', borderRadius: 'var(--radius-lg)', overflow: 'hidden', aspectRatio: '16/9' }}>
+          <img src={blog.thumbnail_url} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
+      )}
 
       {/* Tags */}
       {blog.tags && blog.tags.length > 0 && (

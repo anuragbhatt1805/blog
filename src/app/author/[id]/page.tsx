@@ -20,7 +20,7 @@ export default async function AuthorPage({ params }: { params: Promise<{ id: str
 
   const { data: blogs } = await supabase
     .from('blogs')
-    .select('id, title, subtitle, read_time_minutes, created_at')
+    .select('id, slug, title, subtitle, thumbnail_url, read_time_minutes, created_at')
     .eq('author_id', authorId)
     .eq('status', 'published')
     .order('created_at', { ascending: false })
@@ -79,9 +79,21 @@ export default async function AuthorPage({ params }: { params: Promise<{ id: str
       {blogs && blogs.length > 0 ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
           {blogs.map((blog: any) => (
-            <Link key={blog.id} href={`/blogs/${blog.id}`} style={{ display: 'block' }}>
-              <div style={{ padding: '1.25rem 0', borderBottom: '1px solid var(--border)', cursor: 'pointer', transition: 'opacity 0.2s' }}>
-                <div className="flex-row-gap paragraph-sm" style={{ marginBottom: '0.375rem', gap: '0.5rem' }}>
+            <Link key={blog.id} href={`/blogs/${blog.slug || blog.id}`} style={{ display: 'block' }}>
+              <div style={{ 
+                padding: '1.25rem 0', 
+                borderBottom: '1px solid var(--border)', 
+                cursor: 'pointer', 
+                transition: 'opacity 0.2s',
+                display: 'flex',
+                gap: '1.5rem',
+                alignItems: 'flex-start'
+              }}>
+                {blog.thumbnail_url && (
+                  <img src={blog.thumbnail_url} alt="" style={{ width: '120px', aspectRatio: '16/9', objectFit: 'cover', borderRadius: 'var(--radius-md)', flexShrink: 0 }} />
+                )}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="flex-row-gap paragraph-sm" style={{ marginBottom: '0.375rem', gap: '0.5rem' }}>
                   <span className="flex-center" style={{ gap: '0.25rem' }}>
                     <Clock size={13} />
                     {blog.read_time_minutes} min
@@ -95,6 +107,7 @@ export default async function AuthorPage({ params }: { params: Promise<{ id: str
                     {blog.subtitle}
                   </p>
                 )}
+                </div>
               </div>
             </Link>
           ))}

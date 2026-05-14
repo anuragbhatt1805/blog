@@ -18,11 +18,13 @@ export default async function SavedBlogsPage() {
       created_at,
       blogs:blog_id (
         id,
+        slug,
         title,
         subtitle,
         read_time_minutes,
         created_at,
         tags,
+        thumbnail_url,
         profiles:author_id (name)
       )
     `)
@@ -45,15 +47,22 @@ export default async function SavedBlogsPage() {
 
       {savedBlogs.length > 0 ? (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          {savedBlogs.map((blog: any) => (
-            <Link key={blog.id} href={`/blogs/${blog.id}`} style={{ display: 'block' }}>
+          {savedBlogs.map((blog: any) => blog && (
+            <Link key={blog.id} href={`/blogs/${blog.slug || blog.id}`} style={{ display: 'block' }}>
               <div style={{ 
                 padding: '1.25rem 0', 
                 borderBottom: '1px solid var(--border)', 
                 cursor: 'pointer',
-                transition: 'opacity 0.2s'
+                transition: 'opacity 0.2s',
+                display: 'flex',
+                gap: '1.5rem',
+                alignItems: 'flex-start'
               }}>
-                <div className="flex-row-gap paragraph-sm" style={{ marginBottom: '0.375rem', gap: '0.5rem' }}>
+                {blog.thumbnail_url && (
+                  <img src={blog.thumbnail_url} alt="" style={{ width: '120px', aspectRatio: '16/9', objectFit: 'cover', borderRadius: 'var(--radius-md)', flexShrink: 0 }} />
+                )}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="flex-row-gap paragraph-sm" style={{ marginBottom: '0.375rem', gap: '0.5rem' }}>
                   <span>{blog.profiles?.name || 'Anonymous'}</span>
                   <span style={{ color: 'var(--text-muted)' }}>·</span>
                   <span className="flex-center" style={{ gap: '0.25rem' }}>
@@ -81,6 +90,7 @@ export default async function SavedBlogsPage() {
                     ))}
                   </div>
                 )}
+                </div>
               </div>
             </Link>
           ))}

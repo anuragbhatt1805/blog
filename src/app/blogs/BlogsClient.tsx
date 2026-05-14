@@ -87,59 +87,83 @@ export default function BlogsClient({ initialBlogs }: { initialBlogs: any[] }) {
       <div className="grid-cards">
         {filteredBlogs.length > 0 ? (
           filteredBlogs.map((blog) => (
-            <Link key={blog.id} href={`/blogs/${blog.id}`} style={{ display: 'block', height: '100%' }}>
-              <div className="saas-card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <div className="flex-row-gap paragraph-sm" style={{ marginBottom: '0.75rem' }}>
-                  <span className="flex-center" style={{ gap: '0.25rem' }}>
-                    <Clock size={14} />
-                    {blog.read_time_minutes} min read
-                  </span>
-                  <span style={{ color: 'var(--border)' }}>·</span>
-                  <span>
-                    {new Date(blog.created_at).toLocaleDateString('en-US', {
-                      month: 'short', day: 'numeric', year: 'numeric'
-                    })}
-                  </span>
-                </div>
-
-                <h3 className="heading-md" style={{
-                  marginBottom: '0.5rem',
-                  display: '-webkit-box',
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical',
-                  overflow: 'hidden',
-                  lineHeight: 1.35
-                }}>
-                  {blog.title}
-                </h3>
-
-                <p className="paragraph-md" style={{
-                  flexGrow: 1,
-                  display: '-webkit-box',
-                  WebkitLineClamp: 3,
-                  WebkitBoxOrient: 'vertical',
-                  overflow: 'hidden',
-                  marginBottom: '1rem'
-                }}>
-                  {blog.subtitle}
-                </p>
-
-                {/* Tags */}
-                {blog.tags && blog.tags.length > 0 && (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', marginBottom: '1rem' }}>
-                    {blog.tags.slice(0, 3).map((tag: string) => (
-                      <span key={tag} className="badge" style={{ marginBottom: 0, fontSize: '0.688rem', padding: '0.15rem 0.5rem' }}>
-                        {tag}
-                      </span>
-                    ))}
+            <Link key={blog.id} href={`/blogs/${blog.slug || blog.id}`} style={{ display: 'block', height: '100%' }}>
+              <div className="saas-card hover-lift" style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: '1.25rem' }}>
+                {blog.thumbnail_url ? (
+                  <div style={{ marginBottom: '1.25rem', borderRadius: 'var(--radius-md)', overflow: 'hidden', aspectRatio: '16/9' }}>
+                    <img src={blog.thumbnail_url} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                ) : (
+                  <div
+                    className="flex-center"
+                    style={{
+                      marginBottom: '1.25rem',
+                      borderRadius: 'var(--radius-md)',
+                      overflow: 'hidden',
+                      aspectRatio: '16/9',
+                      background: 'var(--surface-2)',
+                      border: '1px solid var(--border)',
+                    }}
+                  >
+                    <FileText size={40} style={{ color: 'var(--text-muted)' }} />
+                    <span>
+                      No thumbnail available
+                    </span>
                   </div>
                 )}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <div className="flex-row-gap paragraph-sm" style={{ marginBottom: '0.75rem' }}>
+                    <span className="flex-center" style={{ gap: '0.25rem' }}>
+                      <Clock size={14} />
+                      {blog.read_time_minutes} min read
+                    </span>
+                    <span style={{ color: 'var(--border)' }}>·</span>
+                    <span>
+                      {new Date(blog.created_at).toLocaleDateString('en-US', {
+                        month: 'short', day: 'numeric', year: 'numeric'
+                      })}
+                    </span>
+                  </div>
 
-                <div className="flex-row-gap" style={{ marginTop: 'auto' }}>
-                  <span className="text-primary" style={{ fontSize: '0.875rem', fontWeight: 600 }}>
-                    Read article
-                  </span>
-                  <ArrowRight size={14} style={{ color: 'var(--primary)' }} />
+                  <h3 className="heading-md" style={{
+                    marginBottom: '0.5rem',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    lineHeight: 1.35
+                  }}>
+                    {blog.title}
+                  </h3>
+
+                  <p className="paragraph-md" style={{
+                    flexGrow: 1,
+                    display: '-webkit-box',
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    marginBottom: '1rem'
+                  }}>
+                    {blog.subtitle}
+                  </p>
+
+                  {/* Tags */}
+                  {blog.tags && blog.tags.length > 0 && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', marginBottom: '1rem' }}>
+                      {blog.tags.slice(0, 3).map((tag: string) => (
+                        <span key={tag} className="badge" style={{ marginBottom: 0, fontSize: '0.688rem', padding: '0.15rem 0.5rem' }}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="flex-row-gap" style={{ marginTop: 'auto', paddingTop: '1rem' }}>
+                    <span className="text-primary" style={{ fontSize: '0.875rem', fontWeight: 600 }}>
+                      Read article
+                    </span>
+                    <ArrowRight size={14} style={{ color: 'var(--primary)' }} />
+                  </div>
                 </div>
               </div>
             </Link>
