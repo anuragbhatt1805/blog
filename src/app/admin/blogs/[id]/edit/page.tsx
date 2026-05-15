@@ -7,10 +7,15 @@ export default async function EditBlogPage({ params }: { params: Promise<{ id: s
   const blogId = resolvedParams.id;
   const supabase = await createClient()
 
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  if (!user) notFound()
+
   const { data: blog, error } = await supabase
     .from('blogs')
     .select('*')
     .eq('id', blogId)
+    .eq('author_id', user.id)
     .single()
 
   if (error || !blog) {

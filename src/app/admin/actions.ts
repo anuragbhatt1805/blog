@@ -147,7 +147,7 @@ export async function createBlog(formData: FormData) {
 }
 
 export async function updateBlog(id: string, formData: FormData) {
-  const { supabase } = await checkAdmin()
+  const { supabase, user } = await checkAdmin()
 
   const title = formData.get('title') as string
   const subtitle = formData.get('subtitle') as string
@@ -161,7 +161,12 @@ export async function updateBlog(id: string, formData: FormData) {
   const read_time_minutes = calculateReadTime(content)
 
   // Fetch old content to compare images
-  const { data: oldBlog } = await supabase.from('blogs').select('content, thumbnail_url').eq('id', id).single()
+  const { data: oldBlog } = await supabase
+    .from('blogs')
+    .select('content, thumbnail_url')
+    .eq('id', id)
+    .eq('author_id', user.id)
+    .single()
 
   if (oldBlog) {
     const oldImages = extractCloudinaryImages(oldBlog.content || '')
@@ -192,6 +197,7 @@ export async function updateBlog(id: string, formData: FormData) {
       updated_at: new Date().toISOString()
     })
     .eq('id', id)
+    .eq('author_id', user.id)
 
   if (error) throw new Error(error.message)
 
@@ -203,11 +209,12 @@ export async function updateBlog(id: string, formData: FormData) {
 }
 
 export async function toggleBlogStatus(id: string, newStatus: string) {
-  const { supabase } = await checkAdmin()
+  const { supabase, user } = await checkAdmin()
 
   const { error } = await supabase.from('blogs')
     .update({ status: newStatus, updated_at: new Date().toISOString() })
     .eq('id', id)
+    .eq('author_id', user.id)
 
   if (error) throw new Error(error.message)
 
@@ -218,7 +225,7 @@ export async function toggleBlogStatus(id: string, newStatus: string) {
 }
 
 export async function deleteBlog(id: string) {
-  const { supabase } = await checkAdmin()
+  const { supabase, user } = await checkAdmin()
 
   try {
     // Fetch content first to delete associated images
@@ -226,6 +233,7 @@ export async function deleteBlog(id: string) {
       .from('blogs')
       .select('content, thumbnail_url')
       .eq('id', id)
+      .eq('author_id', user.id)
       .single()
     
     if (fetchError) {
@@ -245,7 +253,11 @@ export async function deleteBlog(id: string) {
       }
     }
 
-    const { error: deleteError } = await supabase.from('blogs').delete().eq('id', id)
+    const { error: deleteError } = await supabase
+      .from('blogs')
+      .delete()
+      .eq('id', id)
+      .eq('author_id', user.id)
     if (deleteError) {
       console.error('Error deleting blog from DB:', deleteError)
       throw new Error(`DB Delete Error: ${deleteError.message}`)
