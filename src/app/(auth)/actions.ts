@@ -58,7 +58,9 @@ import { headers } from 'next/headers'
 
 export async function signInWithProvider(provider: 'google' | 'github') {
   const supabase = await createClient()
-  const origin = (await headers()).get('origin')
+  const host = (await headers()).get('host')
+  const protocol = (await headers()).get('x-forwarded-proto') || 'http'
+  const origin = `${protocol}://${host}`
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
