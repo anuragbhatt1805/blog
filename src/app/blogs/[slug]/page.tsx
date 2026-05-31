@@ -107,67 +107,104 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
     .eq('blog_id', blogId)
 
   return (
-    <article className="app-container" style={{ maxWidth: 'min(75%, 1000px)', padding: '4rem 1.5rem' }}>
+    <article className="app-container" style={{ maxWidth: '780px', padding: '4rem 1.5rem' }}>
       {/* Article Header */}
       <header style={{ marginBottom: '3rem' }}>
-        <h1 className="heading-xl" style={{ marginBottom: '1rem', lineHeight: 1.1 }}>
+        {/* Eyebrow meta */}
+        <div style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '0.5rem',
+          alignItems: 'center',
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.6875rem',
+          textTransform: 'uppercase',
+          letterSpacing: '0.2em',
+          color: 'var(--text-muted)',
+          marginBottom: '1.75rem',
+        }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem' }}>
+            <Calendar size={11} />
+            {new Date(blog.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+          </span>
+          <span>·</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem' }}>
+            <Clock size={11} />
+            {blog.read_time_minutes} min read
+          </span>
+          {blog.tags && blog.tags.length > 0 && (
+            <>
+              <span>·</span>
+              <span>{blog.tags.slice(0, 3).join(' / ')}</span>
+            </>
+          )}
+        </div>
+
+        <h1 className="heading-xl" style={{ marginBottom: '1.25rem', lineHeight: 1 }}>
           {blog.title}
         </h1>
-        <p className="paragraph-lg" style={{ fontSize: '1.25rem', marginBottom: '2rem', lineHeight: 1.65 }}>
+        <p style={{
+          fontFamily: 'var(--font-serif)',
+          fontSize: '1.375rem',
+          lineHeight: 1.4,
+          color: 'var(--text-muted)',
+          marginBottom: '2rem',
+          fontStyle: 'italic',
+        }}>
           {blog.subtitle}
         </p>
 
-        {/* Author Meta */}
-        <div className="flex-row-gap paragraph-sm" style={{ flexWrap: 'wrap', gap: '0.625rem' }}>
-          <Link href={`/author/${blog.author_id}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', cursor: 'pointer' }}>
-            <div className="avatar-circle" style={{ width: '1.375rem', height: '1.375rem' }}>
+        {/* Author byline */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.75rem',
+          paddingTop: '1.5rem',
+          borderTop: '1px solid var(--border)',
+        }}>
+          <Link href={`/author/${blog.author_id}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.625rem' }}>
+            <div className="avatar-circle" style={{ width: '2rem', height: '2rem' }}>
               {blog.profiles?.avatar_url ? (
                 <img src={blog.profiles.avatar_url} alt="" />
               ) : (
-                <User size={11} />
+                <User size={13} />
               )}
             </div>
-            <span style={{ fontWeight: 600, fontSize: '0.875rem', color: 'var(--foreground)' }}>{blog.profiles?.name || 'Anonymous'}</span>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <span style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.625rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.2em',
+                color: 'var(--text-muted)',
+              }}>
+                Written by
+              </span>
+              <span style={{ fontFamily: 'var(--font-serif)', fontSize: '0.9375rem', color: 'var(--foreground)' }}>
+                {blog.profiles?.name || 'Anonymous'}
+              </span>
+            </div>
           </Link>
-
-          <span style={{ color: 'var(--text-muted)' }}>·</span>
-
-          <span className="flex-center" style={{ gap: '0.25rem' }}>
-            <Calendar size={13} />
-            {new Date(blog.created_at).toLocaleDateString('en-US', {
-              month: 'short', day: 'numeric', year: 'numeric'
-            })}
-          </span>
-
-          <span style={{ color: 'var(--text-muted)' }}>·</span>
-
-          <span className="flex-center" style={{ gap: '0.25rem' }}>
-            <Clock size={13} />
-            {blog.read_time_minutes} min read
-          </span>
         </div>
       </header>
 
       {/* Thumbnail */}
       {blog.thumbnail_url && (
-        <div style={{ marginBottom: '2.5rem', borderRadius: 'var(--radius-lg)', overflow: 'hidden', aspectRatio: '16/9' }}>
+        <div style={{ marginBottom: '3rem', borderRadius: 'var(--radius-lg)', overflow: 'hidden', aspectRatio: '16/9' }}>
           <img src={blog.thumbnail_url} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
       )}
 
       {/* Tags */}
       {blog.tags && blog.tags.length > 0 && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem', marginBottom: '2rem' }}>
           {blog.tags.map((tag: string) => (
             <Link key={tag} href={`/blogs?tag=${tag}`}>
-              <span className="badge" style={{ marginBottom: 0, cursor: 'pointer' }}>{tag}</span>
+              <span className="badge" style={{ cursor: 'pointer' }}>{tag}</span>
             </Link>
           ))}
         </div>
       )}
-
-      {/* Divider */}
-      <div className="divider" style={{ margin: '0 0 2.5rem 0' }} />
 
       {/* Blog Content — rendered as Markdown */}
       <BlogContent content={blog.content} />
