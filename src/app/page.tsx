@@ -49,13 +49,13 @@ export default async function Home() {
           </div>
 
           <h1 className="heading-xl animate-fade-up animate-fade-up-delay-1" style={{ marginBottom: '1.5rem' }}>
-            Insights for the<br />
-            <span style={{ color: 'var(--primary)' }}>Modern Developer</span>
+            Signals from the<br />
+            <span style={{ color: 'var(--accent)' }}>Architecture</span>
           </h1>
 
           <p className="paragraph-lg animate-fade-up animate-fade-up-delay-2" style={{ maxWidth: '640px', margin: '0 auto 2.5rem auto' }}>
-            Discover articles, tutorials, and deep dives on software engineering,
-            system design, and the future of web development.
+            Deep-dive technical essays, system design teardowns, and engineering metrics.
+            Measuring the art of modern software development.
           </p>
 
           <div className="flex-center animate-fade-up animate-fade-up-delay-3">

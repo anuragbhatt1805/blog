@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { LogIn, User } from 'lucide-react'
+import { LogIn, User, Activity } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
 
 export default async function Navbar() {
@@ -14,8 +14,8 @@ export default async function Navbar() {
       <div className="app-container navbar-inner">
         <div className="flex-center" style={{ gap: '0' }}>
           <Link href="/" className="brand-logo">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--primary)' }}><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
-            DevBlog
+            <Activity size={24} style={{ color: 'var(--accent)' }} />
+            Telemetry
           </Link>
           <div className="nav-links">
             <Link href="/blogs" className="nav-link">

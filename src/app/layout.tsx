@@ -14,8 +14,8 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://blog-anurag.vercel.app'),
   title: {
-    default: "DevBlog - Advanced Developer Insights",
-    template: "%s | DevBlog"
+    default: "Telemetry - Advanced Developer Insights",
+    template: "%s | Telemetry"
   },
   description: "A premium blogging platform for developers to share insights, tutorials, and more.",
   keywords: ["developer", "blog", "coding", "programming", "tutorials", "insights"],
@@ -25,24 +25,23 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://blog-anurag.vercel.app", // Placeholder, will be used if defined
-    siteName: "DevBlog",
-    title: "DevBlog - Advanced Developer Insights",
+    siteName: "Telemetry",
+    title: "Telemetry - Advanced Developer Insights",
     description: "A premium blogging platform for developers to share insights, tutorials, and more.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "DevBlog",
+        alt: "Telemetry",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "DevBlog - Advanced Developer Insights",
-    description: "A premium blogging platform for developers to share insights, tutorials, and more.",
-    images: ["/og-image.png"],
-    creator: "@devblog",
+    title: "Telemetry - Advanced Developer Insights",
+    description: "Deep-dive technical essays, system design teardowns, and engineering metrics.",
+    creator: "@telemetry",
   },
   icons: {
     icon: "/icon.png",

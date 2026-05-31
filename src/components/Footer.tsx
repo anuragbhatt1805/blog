@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import { Activity } from 'lucide-react'
 
 export default async function Footer() {
   const supabase = await createClient()
@@ -26,11 +27,11 @@ export default async function Footer() {
           {/* Brand */}
           <div>
             <div className="brand-logo" style={{ marginBottom: '1rem' }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--primary)' }}><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
-              DevBlog
+              <Activity size={20} style={{ color: 'var(--accent)' }} />
+              Telemetry
             </div>
             <p className="paragraph-sm" style={{ maxWidth: '260px' }}>
-              A premium blogging platform for developers to share insights, tutorials, and deep technical dives.
+              Deep-dive technical essays, system design teardowns, and engineering metrics.
             </p>
           </div>
 
@@ -61,7 +62,7 @@ export default async function Footer() {
         
         <div className="flex-between" style={{ flexWrap: 'wrap', gap: '0.5rem' }}>
           <p className="paragraph-sm" style={{ margin: 0 }}>
-            &copy; {new Date().getFullYear()} DevBlog. All rights reserved.
+            &copy; {new Date().getFullYear()} Telemetry. All rights reserved.
           </p>
           <p className="paragraph-sm" style={{ margin: 0 }}>
             Built with Next.js &amp; Supabase
