@@ -33,7 +33,7 @@ export default function BlogsClient({ initialBlogs }: { initialBlogs: any[] }) {
         <span className="eyebrow" style={{ marginBottom: '0.75rem', display: 'block' }}>
           The Journal
         </span>
-        <h1 className="heading-lg" style={{ marginBottom: '0.5rem' }}>All articles</h1>
+        <h1 className="heading-lg" style={{ marginBottom: '0.5rem' }}>All journals</h1>
         <p style={{ fontSize: '1rem', color: 'var(--text-muted)' }}>
           Explore the complete collection of dispatches.
         </p>
@@ -219,7 +219,7 @@ export default function BlogsClient({ initialBlogs }: { initialBlogs: any[] }) {
         <div style={{ padding: '5rem 0', textAlign: 'center' }}>
           <FileText size={36} style={{ margin: '0 auto 1rem', opacity: 0.3, color: 'var(--text-muted)' }} />
           <p className="paragraph-sm" style={{ marginBottom: '1rem' }}>
-            {searchQuery || activeTag ? 'No articles match your filters.' : 'No articles published yet.'}
+            {searchQuery || activeTag ? 'No journals match your filters.' : 'No journals published yet.'}
           </p>
           {activeTag && (
             <button onClick={() => setActiveTag(null)} className="btn btn-outline btn-sm">

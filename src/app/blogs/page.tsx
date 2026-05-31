@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'All Blogs',
-  description: 'Explore our latest articles, tutorials, and insights for modern developers.',
+  description: 'Explore our latest journals, tutorials, and insights for modern developers.',
 }
 
 export const revalidate = 60 // Revalidate every minute

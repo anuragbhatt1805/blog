@@ -73,7 +73,7 @@ export default async function AuthorPage({ params }: { params: Promise<{ id: str
 
       {/* Author's Articles */}
       <h2 className="heading-md" style={{ marginBottom: '1.5rem' }}>
-        Articles by {author.name || 'this author'}
+        Journals by {author.name || 'this author'}
       </h2>
 
       {blogs && blogs.length > 0 ? (
@@ -113,7 +113,7 @@ export default async function AuthorPage({ params }: { params: Promise<{ id: str
           ))}
         </div>
       ) : (
-        <p className="paragraph-md">No published articles yet.</p>
+        <p className="paragraph-md">No published journals yet.</p>
       )}
     </div>
   )

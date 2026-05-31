@@ -26,7 +26,7 @@ export default function BlogActions({
   const { error: showError } = useToast()
 
   const handleLike = async () => {
-    if (!isLoggedIn) return showError('Please sign in to like this article')
+    if (!isLoggedIn) return showError('Please sign in to like this journal')
     const newLikedState = !liked
     setLiked(newLikedState)
     setLikesCount(prev => newLikedState ? prev + 1 : prev - 1)
@@ -34,7 +34,7 @@ export default function BlogActions({
   }
 
   const handleSave = async () => {
-    if (!isLoggedIn) return showError('Please sign in to save this article')
+    if (!isLoggedIn) return showError('Please sign in to save this journal')
     setSaved(!saved)
     await toggleSave(blogId, saved)
   }

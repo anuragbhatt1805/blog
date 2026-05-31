@@ -40,9 +40,9 @@ export default async function SavedBlogsPage() {
       <div style={{ marginBottom: '2.5rem' }}>
         <div className="flex-row-gap" style={{ gap: '0.5rem', marginBottom: '0.25rem' }}>
           <Bookmark size={24} style={{ color: 'var(--primary)' }} />
-          <h1 className="heading-lg" style={{ marginBottom: 0 }}>Saved Articles</h1>
+          <h1 className="heading-lg" style={{ marginBottom: 0 }}>Saved Journals</h1>
         </div>
-        <p className="paragraph-md">Articles you&apos;ve bookmarked for later.</p>
+        <p className="paragraph-md">Journals you&apos;ve bookmarked for later.</p>
       </div>
 
       {savedBlogs.length > 0 ? (
@@ -98,9 +98,9 @@ export default async function SavedBlogsPage() {
       ) : (
         <div className="text-center" style={{ padding: '5rem 0', border: '1px dashed var(--border)', borderRadius: 'var(--radius-xl)' }}>
           <Bookmark size={48} style={{ margin: '0 auto 1rem', opacity: 0.3, color: 'var(--text-muted)' }} />
-          <p className="paragraph-lg" style={{ marginBottom: '1rem' }}>No saved articles yet.</p>
+          <p className="paragraph-lg" style={{ marginBottom: '1rem' }}>No saved journals yet.</p>
           <Link href="/blogs" className="btn btn-outline btn-sm">
-            Browse articles <ArrowRight size={14} />
+            Browse journals <ArrowRight size={14} />
           </Link>
         </div>
       )}

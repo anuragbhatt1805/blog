@@ -17,8 +17,7 @@ export default async function Navbar() {
             Telemetry
           </Link>
           <div className="nav-links">
-            <Link href="/" className="nav-link">Journal</Link>
-            <Link href="/blogs" className="nav-link">Articles</Link>
+            <Link href="/blogs" className="nav-link">Journal</Link>
             {user && <Link href="/saved" className="nav-link">Saved</Link>}
           </div>
         </div>
