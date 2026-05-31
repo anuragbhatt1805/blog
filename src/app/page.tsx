@@ -40,7 +40,7 @@ export default async function Home() {
       <section className="hero-section">
         <div className="app-container">
           <span className="eyebrow animate-fade-up" style={{ marginBottom: '1.5rem', display: 'block' }}>
-            Vol. 01 — Editorial Archive
+            Vol. 01 — Editorial Journal
           </span>
           <h1 className="heading-xl animate-fade-up animate-fade-up-delay-1" style={{ marginBottom: '1.5rem', maxWidth: '20ch' }}>
             Signals from the architecture.
@@ -61,7 +61,7 @@ export default async function Home() {
 
           <div className="animate-fade-up animate-fade-up-delay-3" style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
             <Link href="/blogs" className="btn btn-primary btn-lg">
-              Browse the archive <ArrowRight size={14} />
+              Browse the journal <ArrowRight size={14} />
             </Link>
             <Link href="/signup" className="btn btn-outline btn-lg">Join</Link>
           </div>
