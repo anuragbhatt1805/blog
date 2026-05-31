@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await createClient()
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://blog-anurag.vercel.app'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://telemetry.bhattdev.in'
 
   // Fetch all published blogs
   const { data: blogs } = await supabase

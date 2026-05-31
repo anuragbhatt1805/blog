@@ -25,7 +25,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://blog-anurag.vercel.app'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://telemetry.bhattdev.in'),
   title: {
     default: "Telemetry — Editorial Archive",
     template: "%s | Telemetry"
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://blog-anurag.vercel.app",
+    url: "https://telemetry.bhattdev.in",
     siteName: "Telemetry",
     title: "Telemetry — Editorial Archive",
     description: "An editorial archive of deep-dive technical essays and engineering notes.",
