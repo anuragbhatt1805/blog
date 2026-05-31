@@ -97,7 +97,7 @@ export default async function Footer() {
             gap: '0.75rem',
           }}>
             <span className="paragraph-sm" style={{ margin: 0 }}>
-              © {new Date().getFullYear()} Telemetry
+              © {new Date().getFullYear()} Bhatt Dev
             </span>
             <span className="paragraph-sm" style={{ margin: 0 }}>
               Built for technical storytelling
