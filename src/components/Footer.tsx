@@ -14,122 +14,78 @@ const socialLinks = [
 
 export default async function Footer() {
   return (
-    <footer className="footer" style={{ paddingTop: '4rem' }}>
-      <div className="app-container" style={{ paddingBottom: '2rem' }}>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(12, 1fr)',
-            gap: '2rem',
-            paddingBottom: '4rem',
-          }}
-        >
-          {/* Brand — 5/12 */}
-          <div style={{ gridColumn: 'span 12 / span 12' }} className="footer-brand">
-            <h2 className="brand-logo-lg" style={{ marginBottom: '0.75rem' }}>Telemetry</h2>
-            <p
-              className="paragraph-sm"
-              style={{ marginBottom: '1.25rem' }}
-            >
+    <footer className="w-full py-16 md:py-24 border-t border-border mt-12">
+      <div className="px-4 sm:px-6 grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8">
+        {/* Brand */}
+        <div className="md:col-span-5 flex flex-col justify-between gap-8">
+          <div className="space-y-3">
+            <h2 className="font-serif text-4xl md:text-5xl text-foreground tracking-tight">
+              Telemetry
+            </h2>
+            <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">
               Editorial Engineering Archive
             </p>
-            <p style={{
-              fontSize: '0.875rem',
-              color: 'var(--text-muted)',
-              maxWidth: '20rem',
-              lineHeight: 1.6,
-            }}>
-              Deep-dive technical essays, system design teardowns, and engineering notes from the field.
-            </p>
           </div>
-
-          {/* Navigation — 3/12 */}
-          <div className="footer-col" style={{ gridColumn: 'span 12 / span 12' }}>
-            <h3 className="paragraph-sm" style={{ marginBottom: '1.5rem', fontWeight: 500 }}>
-              Navigation
-            </h3>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {navLinks.map((l) => (
-                <li key={l.label}>
-                  <a
-                    href={l.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="footer-link"
-                  >
-                    <span>{l.label}</span>
-                    <span className="footer-arrow">↗</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Social — 4/12 */}
-          <div className="footer-col" style={{ gridColumn: 'span 12 / span 12' }}>
-            <h3 className="paragraph-sm" style={{ marginBottom: '1.5rem', fontWeight: 500 }}>
-              Social Presence
-            </h3>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {socialLinks.map((l) => (
-                <li key={l.label}>
-                  <a
-                    href={l.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="footer-link"
-                  >
-                    <span>{l.label}</span>
-                    <span className="footer-arrow">↗</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
+            Deep-dive technical essays, system design teardowns, and engineering notes from the field.
+          </p>
         </div>
 
-        <div style={{ borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-            flexWrap: 'wrap',
-            gap: '0.75rem',
-          }}>
-            <span className="paragraph-sm" style={{ margin: 0 }}>
-              © {new Date().getFullYear()} Bhatt Dev
-            </span>
-            <span className="paragraph-sm" style={{ margin: 0 }}>
-              Built for technical storytelling
-            </span>
-          </div>
+        {/* Navigation */}
+        <div className="md:col-span-3 space-y-6">
+          <h3 className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground font-medium">
+            Navigation
+          </h3>
+          <ul className="space-y-4 font-mono">
+            {navLinks.map((l) => (
+              <li key={l.label}>
+                <a
+                  href={l.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center text-sm uppercase tracking-wider text-foreground hover:text-muted-foreground transition-colors duration-300"
+                >
+                  <span>{l.label}</span>
+                  <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Social */}
+        <div className="md:col-span-4 space-y-6">
+          <h3 className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground font-medium">
+            Social Presence
+          </h3>
+          <ul className="space-y-4 font-mono">
+            {socialLinks.map((l) => (
+              <li key={l.label}>
+                <a
+                  href={l.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center text-sm uppercase tracking-wider text-foreground hover:text-muted-foreground transition-colors duration-300"
+                >
+                  <span>{l.label}</span>
+                  <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 
-      <style>{`
-        @media (min-width: 768px) {
-          .footer-brand { grid-column: span 5 / span 5 !important; }
-          .footer-col:nth-of-type(2) { grid-column: span 3 / span 3 !important; }
-          .footer-col:nth-of-type(3) { grid-column: span 4 / span 4 !important; }
-        }
-        .footer-link {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.5rem;
-          font-family: var(--font-mono);
-          font-size: 0.8125rem;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-          color: var(--foreground);
-          transition: color 0.3s ease;
-        }
-        .footer-link:hover { color: var(--text-muted); }
-        .footer-arrow {
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
-        .footer-link:hover .footer-arrow { opacity: 1; }
-      `}</style>
+      {/* Full-width hairline separator */}
+      <div className="mt-16 md:mt-20 border-t border-border" />
+      <div className="px-4 sm:px-6 pt-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+        <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">
+          © {new Date().getFullYear()} Bhatt Dev
+        </span>
+        <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">
+          Built for technical storytelling
+        </span>
+      </div>
     </footer>
   )
 }
