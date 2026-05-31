@@ -1,74 +1,135 @@
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/server'
-import { Activity } from 'lucide-react'
+
+const navLinks = [
+  { url: 'https://bhattdev.in', label: 'Portfolio' },
+  { url: 'https://blog.bhattdev.in', label: 'Blogs' },
+  { url: 'https://archive.bhattdev.in', label: 'Archive' },
+]
+
+const socialLinks = [
+  { url: 'https://www.instagram.com/lumen_archive_posts', label: 'Instagram' },
+  { url: 'https://github.com/anuragbhatt1805', label: 'GitHub' },
+  { url: 'https://www.linkedin.com/in/anuragbhatt1805', label: 'LinkedIn' },
+]
 
 export default async function Footer() {
-  const supabase = await createClient()
-  const { data: settingsData } = await supabase
-    .from('site_settings')
-    .select('key, value')
-    .in('key', ['github_url', 'twitter_url', 'linkedin_url', 'contact_url'])
-
-  const cfg: Record<string, string> = {}
-  settingsData?.forEach((s: any) => { cfg[s.key] = s.value })
-
-  const socials = [
-    { url: cfg.github_url, label: 'GitHub' },
-    { url: cfg.twitter_url, label: 'Twitter / X' },
-    { url: cfg.linkedin_url, label: 'LinkedIn' },
-    { url: cfg.contact_url, label: 'Contact' },
-  ].filter(s => s.url)
-
   return (
-    <footer className="footer">
-      <div className="footer-accent" />
-      <div className="app-container" style={{ padding: '3rem 1.5rem 2rem 1.5rem' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2.5rem', marginBottom: '2.5rem' }}>
-          {/* Brand */}
-          <div>
-            <div className="brand-logo" style={{ marginBottom: '1rem' }}>
-              <Activity size={20} style={{ color: 'var(--accent)' }} />
-              Telemetry
-            </div>
-            <p className="paragraph-sm" style={{ maxWidth: '260px' }}>
-              Deep-dive technical essays, system design teardowns, and engineering metrics.
+    <footer className="footer" style={{ paddingTop: '4rem' }}>
+      <div className="app-container" style={{ paddingBottom: '2rem' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(12, 1fr)',
+            gap: '2rem',
+            paddingBottom: '4rem',
+          }}
+        >
+          {/* Brand — 5/12 */}
+          <div style={{ gridColumn: 'span 12 / span 12' }} className="footer-brand">
+            <h2 className="brand-logo-lg" style={{ marginBottom: '0.75rem' }}>Telemetry</h2>
+            <p
+              className="paragraph-sm"
+              style={{ marginBottom: '1.25rem' }}
+            >
+              Editorial Engineering Archive
+            </p>
+            <p style={{
+              fontSize: '0.875rem',
+              color: 'var(--text-muted)',
+              maxWidth: '20rem',
+              lineHeight: 1.6,
+            }}>
+              Deep-dive technical essays, system design teardowns, and engineering notes from the field.
             </p>
           </div>
 
-          {/* Navigation */}
-          <div>
-            <h4 style={{ fontSize: '0.813rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', marginBottom: '1rem' }}>Navigation</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-              <Link href="/" className="nav-link">Home</Link>
-              <Link href="/blogs" className="nav-link">Articles</Link>
-              <Link href="/login" className="nav-link">Sign in</Link>
-            </div>
+          {/* Navigation — 3/12 */}
+          <div className="footer-col" style={{ gridColumn: 'span 12 / span 12' }}>
+            <h3 className="paragraph-sm" style={{ marginBottom: '1.5rem', fontWeight: 500 }}>
+              Navigation
+            </h3>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {navLinks.map((l) => (
+                <li key={l.label}>
+                  <a
+                    href={l.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="footer-link"
+                  >
+                    <span>{l.label}</span>
+                    <span className="footer-arrow">↗</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          {/* Socials */}
-          {socials.length > 0 && (
-            <div>
-              <h4 style={{ fontSize: '0.813rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', marginBottom: '1rem' }}>Connect</h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-                {socials.map(s => (
-                  <a key={s.label} href={s.url!.startsWith('http') ? s.url! : `https://${s.url}`} target="_blank" rel="noopener noreferrer" className="nav-link">{s.label}</a>
-                ))}
-              </div>
-            </div>
-          )}
+          {/* Social — 4/12 */}
+          <div className="footer-col" style={{ gridColumn: 'span 12 / span 12' }}>
+            <h3 className="paragraph-sm" style={{ marginBottom: '1.5rem', fontWeight: 500 }}>
+              Social Presence
+            </h3>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {socialLinks.map((l) => (
+                <li key={l.label}>
+                  <a
+                    href={l.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="footer-link"
+                  >
+                    <span>{l.label}</span>
+                    <span className="footer-arrow">↗</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
-        <div className="divider" style={{ margin: '0 0 1.5rem 0' }} />
-        
-        <div className="flex-between" style={{ flexWrap: 'wrap', gap: '0.5rem' }}>
-          <p className="paragraph-sm" style={{ margin: 0 }}>
-            &copy; {new Date().getFullYear()} Telemetry. All rights reserved.
-          </p>
-          <p className="paragraph-sm" style={{ margin: 0 }}>
-            Built with Next.js &amp; Supabase
-          </p>
+        <div style={{ borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            flexWrap: 'wrap',
+            gap: '0.75rem',
+          }}>
+            <span className="paragraph-sm" style={{ margin: 0 }}>
+              © {new Date().getFullYear()} Telemetry
+            </span>
+            <span className="paragraph-sm" style={{ margin: 0 }}>
+              Built for technical storytelling
+            </span>
+          </div>
         </div>
       </div>
+
+      <style>{`
+        @media (min-width: 768px) {
+          .footer-brand { grid-column: span 5 / span 5 !important; }
+          .footer-col:nth-of-type(2) { grid-column: span 3 / span 3 !important; }
+          .footer-col:nth-of-type(3) { grid-column: span 4 / span 4 !important; }
+        }
+        .footer-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-family: var(--font-mono);
+          font-size: 0.8125rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: var(--foreground);
+          transition: color 0.3s ease;
+        }
+        .footer-link:hover { color: var(--text-muted); }
+        .footer-arrow {
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        .footer-link:hover .footer-arrow { opacity: 1; }
+      `}</style>
     </footer>
   )
 }

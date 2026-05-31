@@ -2,13 +2,12 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import { Search, Clock, ArrowRight, FileText } from 'lucide-react'
+import { Search, Clock, FileText, User } from 'lucide-react'
 
 export default function BlogsClient({ initialBlogs }: { initialBlogs: any[] }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [activeTag, setActiveTag] = useState<string | null>(null)
 
-  // Collect all unique tags across all blogs
   const allTags = useMemo(() => {
     const tagSet = new Set<string>()
     initialBlogs.forEach(blog => {
@@ -18,170 +17,217 @@ export default function BlogsClient({ initialBlogs }: { initialBlogs: any[] }) {
   }, [initialBlogs])
 
   const filteredBlogs = initialBlogs.filter(blog => {
+    const q = searchQuery.toLowerCase()
     const matchesSearch =
-      blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      blog.subtitle.toLowerCase().includes(searchQuery.toLowerCase())
+      !q ||
+      blog.title.toLowerCase().includes(q) ||
+      (blog.subtitle || '').toLowerCase().includes(q)
     const matchesTag = !activeTag || (blog.tags || []).includes(activeTag)
     return matchesSearch && matchesTag
   })
 
   return (
-    <div className="app-container" style={{ maxWidth: '1000px', padding: '4rem 1.5rem' }}>
+    <div className="app-container" style={{ padding: '4rem 1.5rem' }}>
       {/* Page Header */}
-      <div style={{ marginBottom: '2rem' }}>
-        <h1 className="heading-lg" style={{ marginBottom: '0.25rem' }}>All Articles</h1>
-        <p className="paragraph-md">Explore our complete collection of insights.</p>
+      <div style={{ marginBottom: '3rem' }}>
+        <span className="eyebrow" style={{ marginBottom: '0.75rem', display: 'block' }}>
+          The Archive
+        </span>
+        <h1 className="heading-lg" style={{ marginBottom: '0.5rem' }}>All articles</h1>
+        <p style={{ fontSize: '1rem', color: 'var(--text-muted)' }}>
+          Explore the complete collection of dispatches.
+        </p>
       </div>
 
-      {/* Search */}
-      <div style={{ position: 'relative', marginBottom: '1.25rem' }}>
-        <div style={{ position: 'absolute', top: 0, bottom: 0, left: '1rem', display: 'flex', alignItems: 'center', pointerEvents: 'none' }}>
-          <Search size={18} style={{ color: 'var(--text-muted)' }} />
-        </div>
-        <input
-          type="text"
-          className="form-input"
-          style={{ paddingLeft: '2.75rem', background: 'var(--surface-1)' }}
-          placeholder="Search articles by title or topic..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </div>
-
-      {/* Tag Filter */}
-      {allTags.length > 0 && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem', marginBottom: '2rem' }}>
-          <button
-            onClick={() => setActiveTag(null)}
-            className={activeTag === null ? 'badge' : 'badge'}
-            style={{
-              cursor: 'pointer',
-              marginBottom: 0,
-              background: activeTag === null ? 'var(--primary)' : undefined,
-              color: activeTag === null ? 'var(--text-inverse)' : undefined,
-              borderColor: activeTag === null ? 'var(--primary)' : undefined,
-            }}
-          >
-            All
-          </button>
-          {allTags.map(tag => (
-            <button
-              key={tag}
-              onClick={() => setActiveTag(activeTag === tag ? null : tag)}
-              className="badge"
+      {/* Filter Bar */}
+      <section style={{ borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', padding: '1.5rem 0', marginBottom: '3rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          <div style={{ position: 'relative' }}>
+            <Search
+              size={13}
               style={{
-                cursor: 'pointer',
-                marginBottom: 0,
-                background: activeTag === tag ? 'var(--primary)' : undefined,
-                color: activeTag === tag ? 'var(--text-inverse)' : undefined,
-                borderColor: activeTag === tag ? 'var(--primary)' : undefined,
+                position: 'absolute',
+                left: 0,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                color: 'var(--text-muted)',
+              }}
+            />
+            <input
+              type="text"
+              className="form-input-underline"
+              placeholder="SEARCH BY TITLE OR TOPIC…"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          {allTags.length > 0 && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
+              <button
+                onClick={() => setActiveTag(null)}
+                className={activeTag === null ? 'badge badge-accent' : 'badge'}
+                style={{ cursor: 'pointer' }}
+              >
+                All works
+              </button>
+              {allTags.map(tag => (
+                <button
+                  key={tag}
+                  onClick={() => setActiveTag(activeTag === tag ? null : tag)}
+                  className={activeTag === tag ? 'badge badge-accent' : 'badge'}
+                  style={{ cursor: 'pointer' }}
+                >
+                  {tag}
+                </button>
+              ))}
+              <span
+                style={{
+                  marginLeft: 'auto',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.625rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.2em',
+                  color: 'var(--text-muted)',
+                }}
+              >
+                {filteredBlogs.length} works
+              </span>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Masonry Grid */}
+      {filteredBlogs.length > 0 ? (
+        <div className="masonry">
+          {filteredBlogs.map((blog) => (
+            <Link
+              key={blog.id}
+              href={`/blogs/${blog.slug || blog.id}`}
+              style={{
+                display: 'block',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius-lg)',
+                overflow: 'hidden',
+                background: 'var(--card-bg)',
+                transition: 'border-color 0.3s ease',
               }}
             >
-              {tag}
-            </button>
-          ))}
-        </div>
-      )}
+              {blog.thumbnail_url ? (
+                <div style={{ aspectRatio: '16/10', overflow: 'hidden' }}>
+                  <img
+                    src={blog.thumbnail_url}
+                    alt={blog.title}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.7s ease' }}
+                  />
+                </div>
+              ) : (
+                <div style={{
+                  aspectRatio: '16/10',
+                  background: 'var(--surface-2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderBottom: '1px solid var(--border)',
+                }}>
+                  <FileText size={28} style={{ color: 'var(--text-muted)', opacity: 0.4 }} />
+                </div>
+              )}
+              <div style={{ padding: '1.25rem 1.25rem 1.5rem' }}>
+                <div style={{
+                  display: 'flex',
+                  gap: '0.5rem',
+                  alignItems: 'center',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.625rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.18em',
+                  color: 'var(--text-muted)',
+                  marginBottom: '0.75rem',
+                }}>
+                  <Clock size={11} />
+                  <span>{blog.read_time_minutes} min</span>
+                  <span>·</span>
+                  <span>
+                    {new Date(blog.created_at).toLocaleDateString('en-US', {
+                      month: 'short', day: 'numeric', year: 'numeric',
+                    })}
+                  </span>
+                </div>
 
-      {/* Blog Grid */}
-      <div className="grid-cards">
-        {filteredBlogs.length > 0 ? (
-          filteredBlogs.map((blog) => (
-            <Link key={blog.id} href={`/blogs/${blog.slug || blog.id}`} style={{ display: 'block', height: '100%' }}>
-              <div className="saas-card hover-lift" style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: '1.25rem' }}>
-                {blog.thumbnail_url ? (
-                  <div style={{ marginBottom: '1.25rem', borderRadius: 'var(--radius-md)', overflow: 'hidden', aspectRatio: '16/9' }}>
-                    <img src={blog.thumbnail_url} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  </div>
-                ) : (
-                  <div
-                    className="flex-center"
-                    style={{
-                      marginBottom: '1.25rem',
-                      borderRadius: 'var(--radius-md)',
-                      overflow: 'hidden',
-                      aspectRatio: '16/9',
-                      background: 'var(--surface-2)',
-                      border: '1px solid var(--border)',
-                    }}
-                  >
-                    <FileText size={40} style={{ color: 'var(--text-muted)' }} />
-                    <span>
-                      No thumbnail available
-                    </span>
+                <h3 className="heading-md" style={{
+                  marginBottom: '0.5rem',
+                  lineHeight: 1.2,
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                }}>
+                  {blog.title}
+                </h3>
+
+                <p style={{
+                  fontSize: '0.9375rem',
+                  color: 'var(--text-muted)',
+                  lineHeight: 1.55,
+                  display: '-webkit-box',
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  marginBottom: '1rem',
+                }}>
+                  {blog.subtitle}
+                </p>
+
+                {blog.tags && blog.tags.length > 0 && (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem', marginBottom: '1rem' }}>
+                    {blog.tags.slice(0, 3).map((tag: string) => (
+                      <span key={tag} className="badge" style={{ padding: '0.25rem 0.5rem', fontSize: '0.5625rem' }}>
+                        {tag}
+                      </span>
+                    ))}
                   </div>
                 )}
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  <div className="flex-row-gap paragraph-sm" style={{ marginBottom: '0.75rem' }}>
-                    <span className="flex-center" style={{ gap: '0.25rem' }}>
-                      <Clock size={14} />
-                      {blog.read_time_minutes} min read
-                    </span>
-                    <span style={{ color: 'var(--border)' }}>·</span>
-                    <span>
-                      {new Date(blog.created_at).toLocaleDateString('en-US', {
-                        month: 'short', day: 'numeric', year: 'numeric'
-                      })}
-                    </span>
+
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  paddingTop: '0.75rem',
+                  borderTop: '1px solid var(--border)',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.625rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.18em',
+                  color: 'var(--text-muted)',
+                }}>
+                  <div className="avatar-circle" style={{ width: '1.25rem', height: '1.25rem' }}>
+                    {blog.profiles?.avatar_url ? (
+                      <img src={blog.profiles.avatar_url} alt="" />
+                    ) : (
+                      <User size={10} />
+                    )}
                   </div>
-
-                  <h3 className="heading-md" style={{
-                    marginBottom: '0.5rem',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    lineHeight: 1.35
-                  }}>
-                    {blog.title}
-                  </h3>
-
-                  <p className="paragraph-md" style={{
-                    flexGrow: 1,
-                    display: '-webkit-box',
-                    WebkitLineClamp: 3,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    marginBottom: '1rem'
-                  }}>
-                    {blog.subtitle}
-                  </p>
-
-                  {/* Tags */}
-                  {blog.tags && blog.tags.length > 0 && (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', marginBottom: '1rem' }}>
-                      {blog.tags.slice(0, 3).map((tag: string) => (
-                        <span key={tag} className="badge" style={{ marginBottom: 0, fontSize: '0.688rem', padding: '0.15rem 0.5rem' }}>
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="flex-row-gap" style={{ marginTop: 'auto', paddingTop: '1rem' }}>
-                    <span className="text-primary" style={{ fontSize: '0.875rem', fontWeight: 600 }}>
-                      Read article
-                    </span>
-                    <ArrowRight size={14} style={{ color: 'var(--primary)' }} />
-                  </div>
+                  <span>{blog.profiles?.name || 'Anonymous'}</span>
                 </div>
               </div>
             </Link>
-          ))
-        ) : (
-          <div style={{ gridColumn: '1 / -1', padding: '5rem 0', textAlign: 'center' }}>
-            <FileText size={48} style={{ margin: '0 auto 1rem auto', opacity: 0.3, color: 'var(--text-muted)' }} />
-            <p className="paragraph-lg">
-              {searchQuery || activeTag ? `No articles found.` : 'No articles published yet.'}
-            </p>
-            {activeTag && (
-              <button onClick={() => setActiveTag(null)} className="btn btn-outline btn-sm" style={{ marginTop: '1rem' }}>
-                Clear filter
-              </button>
-            )}
-          </div>
-        )}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div style={{ padding: '5rem 0', textAlign: 'center' }}>
+          <FileText size={36} style={{ margin: '0 auto 1rem', opacity: 0.3, color: 'var(--text-muted)' }} />
+          <p className="paragraph-sm" style={{ marginBottom: '1rem' }}>
+            {searchQuery || activeTag ? 'No articles match your filters.' : 'No articles published yet.'}
+          </p>
+          {activeTag && (
+            <button onClick={() => setActiveTag(null)} className="btn btn-outline btn-sm">
+              Clear filter
+            </button>
+          )}
+        </div>
+      )}
     </div>
   )
 }

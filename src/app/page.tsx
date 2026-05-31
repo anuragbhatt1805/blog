@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { ArrowRight, BookOpen, Clock, Zap, Users, FileText } from 'lucide-react'
+import { ArrowRight, Clock, FileText, User } from 'lucide-react'
 
 export default async function Home() {
   const supabase = await createClient()
@@ -8,11 +8,11 @@ export default async function Home() {
   const { data: latestBlogs } = await supabase
     .from('blogs')
     .select(`
-      id, 
+      id,
       slug,
-      title, 
-      subtitle, 
-      read_time_minutes, 
+      title,
+      subtitle,
+      read_time_minutes,
       created_at,
       thumbnail_url,
       profiles:author_id (name, avatar_url)
@@ -28,7 +28,6 @@ export default async function Home() {
     .from('profiles')
     .select('id', { count: 'exact', head: true })
 
-  // Fetch site settings for the About section
   const { data: settingsData } = await supabase
     .from('site_settings')
     .select('key, value')
@@ -37,155 +36,197 @@ export default async function Home() {
 
   return (
     <div>
-      {/* ── Hero Section ── */}
+      {/* ── Hero ── */}
       <section className="hero-section">
-        <div className="hero-bg-gradient" />
-        <div className="hero-orb hero-orb-1" />
-        <div className="hero-orb hero-orb-2" />
-
-        <div className="app-container text-center">
-          <div className="badge animate-fade-up" style={{ margin: '0 auto 1.5rem auto' }}>
-            <Zap size={12} /> Next-Gen Blogging Platform
-          </div>
-
-          <h1 className="heading-xl animate-fade-up animate-fade-up-delay-1" style={{ marginBottom: '1.5rem' }}>
-            Signals from the<br />
-            <span style={{ color: 'var(--accent)' }}>Architecture</span>
+        <div className="app-container">
+          <span className="eyebrow animate-fade-up" style={{ marginBottom: '1.5rem', display: 'block' }}>
+            Vol. 01 — Editorial Archive
+          </span>
+          <h1 className="heading-xl animate-fade-up animate-fade-up-delay-1" style={{ marginBottom: '1.5rem', maxWidth: '20ch' }}>
+            Signals from the architecture.
           </h1>
-
-          <p className="paragraph-lg animate-fade-up animate-fade-up-delay-2" style={{ maxWidth: '640px', margin: '0 auto 2.5rem auto' }}>
-            Deep-dive technical essays, system design teardowns, and engineering metrics.
-            Measuring the art of modern software development.
+          <p
+            className="animate-fade-up animate-fade-up-delay-2"
+            style={{
+              fontSize: '1.125rem',
+              lineHeight: 1.6,
+              color: 'var(--text-muted)',
+              maxWidth: '38rem',
+              marginBottom: '2.5rem',
+            }}
+          >
+            Deep-dive technical essays, system design teardowns, and engineering
+            metrics — measuring the art of modern software.
           </p>
 
-          <div className="flex-center animate-fade-up animate-fade-up-delay-3">
+          <div className="animate-fade-up animate-fade-up-delay-3" style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
             <Link href="/blogs" className="btn btn-primary btn-lg">
-              Explore Articles <ArrowRight size={18} />
+              Browse the archive <ArrowRight size={14} />
             </Link>
-            <Link href="/signup" className="btn btn-outline btn-lg">
-              Join Community
-            </Link>
+            <Link href="/signup" className="btn btn-outline btn-lg">Join</Link>
           </div>
         </div>
       </section>
 
       {/* ── Stats Strip ── */}
-      <section style={{ borderBottom: '1px solid var(--border)', background: 'var(--surface-1)' }}>
-        <div className="app-container" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', padding: '2.5rem 1.5rem', textAlign: 'center' }}>
+      <section style={{ borderBottom: '1px solid var(--border)' }}>
+        <div
+          className="app-container"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: '2rem',
+            padding: '3rem 1.5rem',
+          }}
+        >
           <div>
-            <div className="stat-number">{totalBlogs || 0}</div>
-            <div className="stat-label">Published Articles</div>
+            <div className="stat-number">{String(totalBlogs || 0).padStart(2, '0')}</div>
+            <div className="stat-label">Published articles</div>
           </div>
           <div>
-            <div className="stat-number">{totalUsers || 0}</div>
-            <div className="stat-label">Community Members</div>
+            <div className="stat-number">{String(totalUsers || 0).padStart(2, '0')}</div>
+            <div className="stat-label">Community members</div>
           </div>
           <div>
-            <div className="stat-number">&infin;</div>
-            <div className="stat-label">Topics Covered</div>
+            <div className="stat-number">∞</div>
+            <div className="stat-label">Topics covered</div>
           </div>
         </div>
       </section>
 
-      {/* ── About Author Section ── */}
+      {/* ── About Author ── */}
       <section className="section-padding">
         <div className="app-container" style={{ maxWidth: '900px' }}>
-          <div className="saas-card-flat" style={{ display: 'flex', gap: '2.5rem', alignItems: 'center', flexWrap: 'wrap', padding: '2.5rem' }}>
+          <div style={{ display: 'flex', gap: '2.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
             <div style={{
               width: '7rem', height: '7rem', borderRadius: '50%',
-              border: '2px solid var(--primary)',
+              border: '1px solid var(--border-strong)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              background: 'var(--surface-2)', flexShrink: 0, margin: '0 auto',
-              boxShadow: 'var(--shadow-glow)'
+              background: 'var(--surface-1)', flexShrink: 0,
             }}>
-              <span style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--primary)' }}>{cfg.author_avatar_letter || 'A'}</span>
+              <span style={{ fontFamily: 'var(--font-serif)', fontSize: '2.5rem', color: 'var(--foreground)' }}>
+                {cfg.author_avatar_letter || 'A'}
+              </span>
             </div>
             <div style={{ flex: '1 1 300px' }}>
-              <div className="badge" style={{ marginBottom: '1rem' }}>About the Author</div>
-              <h2 className="heading-lg" style={{ marginBottom: '0.75rem' }}>Hi, I&apos;m {cfg.author_name || 'the Author'}</h2>
-              <p className="paragraph-lg">
-                {cfg.author_bio || 'Welcome to my blog!'}
+              <span className="eyebrow" style={{ marginBottom: '0.75rem', display: 'block' }}>
+                About the Author
+              </span>
+              <h2 className="heading-lg" style={{ marginBottom: '0.75rem' }}>
+                Hi, I&apos;m {cfg.author_name || 'the Author'}
+              </h2>
+              <p style={{ fontSize: '1rem', lineHeight: 1.65, color: 'var(--text-muted)' }}>
+                {cfg.author_bio || 'Welcome to my editorial engineering archive.'}
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Latest Blogs Section ── */}
-      <section className="section-padding" style={{ background: 'var(--surface-1)' }}>
-        <div className="app-container" style={{ maxWidth: '1000px' }}>
-          <div className="flex-between" style={{ marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+      {/* ── Latest Articles ── */}
+      <section className="section-padding" style={{ borderTop: '1px solid var(--border)' }}>
+        <div className="app-container">
+          <div className="flex-between" style={{ marginBottom: '3rem', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
-              <h2 className="heading-lg" style={{ marginBottom: '0.25rem' }}>Latest Articles</h2>
-              <p className="paragraph-md">Fresh off the press</p>
+              <span className="eyebrow" style={{ marginBottom: '0.5rem', display: 'block' }}>
+                Recent dispatches
+              </span>
+              <h2 className="heading-lg" style={{ marginBottom: 0 }}>Latest articles</h2>
             </div>
             <Link href="/blogs" className="btn btn-outline btn-sm">
-              View all <ArrowRight size={16} />
+              View all <ArrowRight size={12} />
             </Link>
           </div>
 
           {latestBlogs?.length ? (
-            <div className="grid-featured">
-              {latestBlogs.map((blog: any, i: number) => (
-                <Link key={blog.id} href={`/blogs/${blog.slug || blog.id}`} style={{ display: 'block', height: '100%' }}>
-                  <div className="saas-card hover-lift" style={{ display: 'flex', flexDirection: 'row', height: '100%', padding: '1.25rem' }}>
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                      <div className="flex-row-gap paragraph-sm" style={{ marginBottom: '1rem' }}>
-                        <span className="flex-center" style={{ gap: '0.25rem' }}>
-                          <Clock size={14} />
-                          {blog.read_time_minutes} min read
-                        </span>
-                        <span style={{ color: 'var(--border)' }}>·</span>
-                        <span>
-                          {new Date(blog.created_at).toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric'
-                          })}
-                        </span>
-                      </div>
-
-                      <h3 className={i === 0 ? 'heading-lg' : 'heading-md'} style={{ marginBottom: '0.75rem', lineHeight: 1.3 }}>
-                        {blog.title}
-                      </h3>
-
-                      <p className="paragraph-md" style={{
-                        flexGrow: 1,
-                        display: '-webkit-box',
-                        WebkitLineClamp: i === 0 ? 3 : 2,
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden',
-                        marginBottom: '1.5rem'
-                      }}>
-                        {blog.subtitle}
-                      </p>
-
-                      <div className="flex-row-gap" style={{ marginTop: 'auto' }}>
-                        <div className="avatar-circle" style={{ width: '1.75rem', height: '1.75rem' }}>
-                          {blog.profiles?.avatar_url ? (
-                            <img src={blog.profiles.avatar_url} alt="" />
-                          ) : (
-                            <Users size={14} />
-                          )}
-                        </div>
-                        <span style={{ fontWeight: 500, fontSize: '0.875rem' }}>
-                          {blog.profiles?.name || 'Anonymous'}
-                        </span>
-                      </div>
+            <div className="masonry">
+              {latestBlogs.map((blog: any) => (
+                <Link
+                  key={blog.id}
+                  href={`/blogs/${blog.slug || blog.id}`}
+                  className="group"
+                  style={{
+                    display: 'block',
+                    border: '1px solid var(--border)',
+                    borderRadius: 'var(--radius-lg)',
+                    overflow: 'hidden',
+                    background: 'var(--card-bg)',
+                    transition: 'border-color 0.3s ease',
+                  }}
+                >
+                  {blog.thumbnail_url && (
+                    <div style={{ aspectRatio: '16/10', overflow: 'hidden' }}>
+                      <img
+                        src={blog.thumbnail_url}
+                        alt={blog.title}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
                     </div>
-                    {blog.thumbnail_url && (
-                      <div style={{ marginBottom: '1.25rem', borderRadius: 'var(--radius-md)', overflow: 'hidden', aspectRatio: '16/9', width: '30%' }}>
-                        <img src={blog.thumbnail_url} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  )}
+                  <div style={{ padding: '1.25rem' }}>
+                    <div style={{
+                      display: 'flex',
+                      gap: '0.5rem',
+                      alignItems: 'center',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.625rem',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.18em',
+                      color: 'var(--text-muted)',
+                      marginBottom: '0.75rem',
+                    }}>
+                      <Clock size={11} />
+                      <span>{blog.read_time_minutes} min</span>
+                      <span>·</span>
+                      <span>{new Date(blog.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                    </div>
+                    <h3 className="heading-md" style={{ marginBottom: '0.5rem', lineHeight: 1.2 }}>
+                      {blog.title}
+                    </h3>
+                    <p style={{
+                      fontSize: '0.9375rem',
+                      color: 'var(--text-muted)',
+                      lineHeight: 1.55,
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                      marginBottom: '1rem',
+                    }}>
+                      {blog.subtitle}
+                    </p>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.625rem',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.18em',
+                      color: 'var(--text-muted)',
+                    }}>
+                      <div className="avatar-circle" style={{ width: '1.25rem', height: '1.25rem' }}>
+                        {blog.profiles?.avatar_url ? (
+                          <img src={blog.profiles.avatar_url} alt="" />
+                        ) : (
+                          <User size={10} />
+                        )}
                       </div>
-                    )}
+                      <span>{blog.profiles?.name || 'Anonymous'}</span>
+                    </div>
                   </div>
                 </Link>
               ))}
             </div>
           ) : (
-            <div className="text-center" style={{ padding: '5rem 0', border: '1px dashed var(--border)', borderRadius: 'var(--radius-xl)' }}>
-              <BookOpen size={48} style={{ margin: '0 auto 1rem auto', opacity: 0.3, color: 'var(--text-muted)' }} />
-              <p className="paragraph-lg">No articles published yet. Check back soon!</p>
+            <div style={{
+              padding: '5rem 0',
+              textAlign: 'center',
+              border: '1px dashed var(--border)',
+              borderRadius: 'var(--radius-lg)',
+            }}>
+              <FileText size={36} style={{ margin: '0 auto 1rem', opacity: 0.3, color: 'var(--text-muted)' }} />
+              <p className="paragraph-sm">The archive is empty — check back soon.</p>
             </div>
           )}
         </div>
