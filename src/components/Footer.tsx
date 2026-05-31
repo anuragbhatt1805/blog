@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 const navLinks = [
   { url: 'https://bhattdev.in', label: 'Portfolio' },
-  { url: 'https://blog.bhattdev.in', label: 'Blogs' },
+  { url: 'https://telemetry.bhattdev.in', label: 'Telemetry' },
   { url: 'https://archive.bhattdev.in', label: 'Archive' },
 ]
 
