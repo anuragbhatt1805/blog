@@ -116,7 +116,7 @@ export default async function Home() {
                 Hi, I&apos;m {cfg.author_name || 'the Author'}
               </h2>
               <p style={{ fontSize: '1rem', lineHeight: 1.65, color: 'var(--text-muted)' }}>
-                {cfg.author_bio || 'Welcome to my editorial engineering archive.'}
+                {cfg.author_bio || 'Welcome to my editorial engineering journal.'}
               </p>
             </div>
           </div>
@@ -226,7 +226,7 @@ export default async function Home() {
               borderRadius: 'var(--radius-lg)',
             }}>
               <FileText size={36} style={{ margin: '0 auto 1rem', opacity: 0.3, color: 'var(--text-muted)' }} />
-              <p className="paragraph-sm">The archive is empty — check back soon.</p>
+              <p className="paragraph-sm">The journal is empty — check back soon.</p>
             </div>
           )}
         </div>
