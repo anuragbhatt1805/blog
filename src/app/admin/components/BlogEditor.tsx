@@ -44,7 +44,7 @@ export default function BlogEditor({
         types: ['heading', 'paragraph'],
       }),
       Placeholder.configure({
-        placeholder: 'Start writing your article...',
+        placeholder: 'Start writing your journal...',
       }),
       LinkExt.configure({
         openOnClick: false,
@@ -193,7 +193,7 @@ export default function BlogEditor({
           <input 
             id="title" name="title" className="form-input" 
             value={title} onChange={e => setTitle(e.target.value)} 
-            placeholder="Article title..." required 
+            placeholder="Journal title..." required 
             style={{ fontSize: '1.125rem', fontWeight: 600 }}
           />
         </div>

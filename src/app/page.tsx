@@ -81,7 +81,7 @@ export default async function Home() {
         >
           <div>
             <div className="stat-number">{String(totalBlogs || 0).padStart(2, '0')}</div>
-            <div className="stat-label">Published articles</div>
+            <div className="stat-label">Published journals</div>
           </div>
           <div>
             <div className="stat-number">{String(totalUsers || 0).padStart(2, '0')}</div>
@@ -131,7 +131,7 @@ export default async function Home() {
               <span className="eyebrow" style={{ marginBottom: '0.5rem', display: 'block' }}>
                 Recent dispatches
               </span>
-              <h2 className="heading-lg" style={{ marginBottom: 0 }}>Latest articles</h2>
+              <h2 className="heading-lg" style={{ marginBottom: 0 }}>Latest journals</h2>
             </div>
             <Link href="/blogs" className="btn btn-outline btn-sm">
               View all <ArrowRight size={12} />
