@@ -31,7 +31,7 @@ export default function BlogsClient({ initialBlogs }: { initialBlogs: any[] }) {
       {/* Page Header */}
       <div style={{ marginBottom: '3rem' }}>
         <span className="eyebrow" style={{ marginBottom: '0.75rem', display: 'block' }}>
-          The Archive
+          The Journal
         </span>
         <h1 className="heading-lg" style={{ marginBottom: '0.5rem' }}>All articles</h1>
         <p style={{ fontSize: '1rem', color: 'var(--text-muted)' }}>
